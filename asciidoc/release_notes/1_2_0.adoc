@@ -1,0 +1,39 @@
+[[v1_2_0]]
+= Release notes versión 1.2.0
+
+== Mejoras
+
+* Se mejora la gestión de descarga de recursos remotos. Se implementa un algoritmo para verificar que solo se descargan
+los recursos remotos en caso de que hayan sido modificados respecto a los recursos existentes en caché.
+
+* Adaptación a la nueva API de los servicios de solicitud de permisos para el modo desarrollador (devMode).
+
+* Se crea una _blacklist_ de propiedades de sistema y argumentos para que se oculten sus valores cuando se escribe en
+los ficheros de log con el nivel más alto de trazabilidad.
+
+* Nueva sección _Preguntas frecuentes_ en la documentación. Además se realizan pequeñas correcciones y aclaraciones en la
+documentación.
+
+=== Sistema de log (Application Insights)
+
+* La monitorización de logs de AMIGA Java Launcher se realiza con Application Insights. De este modo se asegura
+que todos los usuarios que utilicen el lanzador pueden enviar los logs y se evitan problemas de autenticación y acceso.
+
+* Envío de nuevos marcadores para registrar el número total de recursos, el número total de recursos descargados, la cantidad
+de bytes descargados, los recursos estáticos descargados (como imágenes y otros) por aplicación de negocio.
+
+== Corrección de errores
+
+* Se corrige un error en la lectura de la propiedad de la JVM (-J-agentlib) que impedía la depuración remota de aplicaciones de negocio
+arrancadas con el lanzador.
+
+* Se corrige un error en la creación del comando de arranque de las aplicaciones de negocio para aquellos usuarios de Windows
+que tienen configurado el nombre de su cuenta de usuario con espacios en blanco.
+
+== Catálogo de máquinas virtuales
+
+* A partir de esta versión **se excluye** del catálogo de máquinas virtuales para las aplicaciones de negocio la versión
+de **Java 11**. Esto es, solo estará disponible en el catálogo la version de Java 8 (1.8.0_202).
+
+
+

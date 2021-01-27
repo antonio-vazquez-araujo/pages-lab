@@ -1,0 +1,7 @@
+[[v1_1_3]]
+= Release notes versión 1.1.3
+
+== Corrección de errores
+
+* Se corrige un posible fallo en los JVM args en caso de espacios en blanco entre argumentos declarados en el archivo descriptor.
+

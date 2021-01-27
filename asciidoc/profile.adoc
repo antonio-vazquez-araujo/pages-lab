@@ -1,0 +1,56 @@
+= Perfil
+
+La ejecución del plugin ya está asignada automáticamente a la fase `package` de _Maven_ y el fichero de configuración, por defecto, es `src/main/ijlp/configuration.xml`.
+Sin embargo, debe asignar el goal `build-dist` para que el plugin se ejecute. Para ello, puede agregar un perfil donde lo indique. Use `generate-ijlp` y especifique el nombre y el directorio del fichero de configuración.
+
+```
+<profile>
+    <id>generate-ijlp</id>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.inditex.aqsw.libjavla</groupId>
+                <artifactId>javalauncher-maven-plugin</artifactId>
+                <configuration>
+                <configurationFile>
+                    src/main/ijlp/configuration.xml
+                </configurationFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>build</id>
+                        <goals>
+                            <goal>build-dist</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</profile>
+```
+
+En ese fichero de configuración `configuration.xml` en la propiedad `codebase` especifique la localización final del _ijlp_:
+
+```
+<java-launcher>
+    <main-class>${start-class}</main-class>
+    <codebase>https://axpreweb2.central.inditex.grp/aplicaciones/miproyecto</codebase>
+    <app-id>FXJavaLauncherDemo</app-id>
+    <environment>des</environment>
+    <slot>default</slot>
+
+    <information>
+        <title>Launcher Demo</title>
+        <vendor>Inditex</vendor>
+        <icon href=" https://axpreweb2.central.inditex.grp/aplicaciones/miproyecto/resources/icon.png" kind="default"/>
+        <offline-allowed/>
+        <shortcut online="true" install="true">
+            <desktop/>
+            <menu submenu="JavaLauncher Demo"/>
+        </shortcut>
+    </information>
+    ...
+```
+

@@ -1,0 +1,5 @@
+[[v0_0_24]]
+= Release notes versión 0.0.24
+
+== Mejoras
+* *MSI*: Se incluyen mejoras para el proceso de instalación mediante el _.msi_.

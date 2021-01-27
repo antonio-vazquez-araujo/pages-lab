@@ -1,0 +1,109 @@
+= F.A.Q. Preguntas más frecuentes
+
+== ¿Qué es _Amiga Java Launcher_?
+
+Un lanzador de aplicaciones java de _Inditex_. Sustituye a la antigua
+tecnología _Java Web Start_. Una vez instalado, la ejecución y
+actualización de cada aplicación es totalmente automática para el
+usuario, que solamente debe activar un hiperenlace.
+
+== ¿Dónde puedo obtener _Amiga Java Laucher_?
+
+Si dispone de permisos de administrador, podrá descargar la última versión disponible
+https://axdesitxws2.central.inditex.grp/software/AMIGA-JAVA-LAUNCHER/windows/[aquí].
+
+En otro caso, deberá solicitar su instalación a _Mantenimiento de usuarios_
+
+== ¿Cómo agrego _IJLP_ a mi proyecto?
+
+Para aplicar la tecnología _IJLP_ a un proyecto necesitará realizar *tres simples tareas*:
+
+. Agregar el plugin `javalauncher-maven-plugin` al fichero `pom.xml` del módulo principal. Ver https://axdesitxws2.central.inditex.grp/software/AMIGA/LIBJAVLA/{javaLauncherMavenPluginVersion}/maven.html#ex_basic_conf[configuración ijlp]
+. Agregar el perfil `generate-ijlp` al fichero `pom.xml` del módulo de arranque. Ver <<profile.adoc#, perfil>>.
+. Crear un fichero de configuración `src/main/ijlp/configuration.xml` en el módulo de arranque. Ver https://axdesitxws2.central.inditex.grp/software/AMIGA/LIBJAVLA/{javaLauncherMavenPluginVersion}/index-conf_descriptor.html[configuración descriptor]
+
+A partir de ahí, cada vez que construya el proyecto y quiera que _Amiga Java Launcher_ ejecute el _ijlp_, deberá firmarlo con el goal `sign` y desplegarlo donde indica su `codebase`. Ver https://axdesitxws2.central.inditex.grp/software/AMIGA/LIBJAVLA/{javaLauncherMavenPluginVersion}/sign-ijlp.html[goal de firmado]
+
+== ¿Puedo usar el antiguo _jnlp_ y también _ijlp_ en mi proyecto?
+
+Sí, _Amiga Java Launcher_ es compatible con las dos tecnologías. Además, no tiene
+que elegir una: se configuran de forma independiente, así que puede
+mantener las dos hasta que se decida a abandonar la antigua
+definitivamente.
+
+== ¿Se requiere alguna versión de _Maven_ concreta para aplicar _IJLP_ a un proyecto?
+
+La versión de _Maven_ ha de ser `3.5.0` o superior.
+
+== ¿Puedo probar mi proyecto localmente, sin seguridad https?
+Sí. Para eso dispone del modo de desarrollo `*devmode*`. Básicamente consiste en agregar un parámetro en el _goal_ de firma y también en la ejecución. Ver <<devmode.adoc#, devmode>>
+
+== ¿Cómo envío mis credenciales en `devmode` desde fuera de la red Inditex?
+
+En ese caso, agregue los siguentes parámetros:
+
+....
+  -Damglauncher.auth.user=username -Damglauncher.auth.pass=password
+....
+
+== ¿Qué permisos necesito para usar `devmode`?
+
+En _Heimdal_ debe tener asignado el rol `developer` con los permisos `allow_dev_signed_apps` y `allow_no_ssl_verify`
+
+== ¿Cómo configuro el codebase de mi proyecto en `devmode`?
+
+Se configura en el fichero `src/main/ijlp/configuration-devmode.xml`.
+
+Ver <<devmode.adoc#, devmode>>.
+
+== ¿Qué es la sustitución de variables mediante notación _Go_?
+Para evitar el excesivo consumo de recursos en _Bamboo_ al construir proyectos multi-entorno, _DevOps_ desarrolló una utilidad en lenguaje _Go_ que utiliza un fichero `.yaml` para especificar los valores correspondientes a cada entorno. En su fichero de configuración de _Amiga Java Launcher_ (`src/main/ijlp/configuration.xml`) puede referirse a estas variables mediante `${{<variable>}}` y así obtener, para cada entorno una configuración distinta.
+
+Ver https://axdesitxws2.central.inditex.grp/software/AMIGA/LIBJAVLA/{javaLauncherMavenPluginVersion}/notacion_go.html[notación GO]
+
+== ¿Cómo puedo ver todas las aplicaciones que _Amiga Java Launcher_ ya ha descargado e instalado?
+
+Desde una consola, ejecute el comando `amglauncher -viewer`.
+
+== Hay una aplicación que no responde. ¿Cómo puedo eliminarla para que _Amiga Java Launcher_ la descargue e instale de nuevo?
+
+Lance el visor de aplicaciones (`amglauncher -viewer`) y seleccione la
+aplicación deseada, luego pulse el botón derecho del ratón y active
+_Desinstalar_.
+
+Si desea hacerlo por consola, use el comando
+`amglauncher -uninstall <archivo-ijlp | arhivo-jnlp>`.
+
+NOTE: _Amiga Java Launcher_ ya comprueba y actualiza cada aplicación siempre que se lanza. No obstante, si algún problema le impide hacerlo correctamente, elimínela de esta forma y vuelva a descargarla.
+
+== ¿Cómo paso parámetros a la aplicación o a la máquina virtual que la ejecute?
+
+=== Desde la linea de comandos:
+
+Parámetros para la aplicación de negocio:: `-Pproperty=value`
+ Parámetros para la VM de Java:: `-Jproperty=value`
+Parámetros para indicar propiedades de sistema::
+`-J-Dijlp.property=value`, `-J-Djnlp.property=value` ó
+`-J-Djavaws.property=value`
+
+=== Desde el fichero de configuración:
+
+Usando los elementos `<jvm>` y `<properties>`
+
+Ver https://axdesitxws2.central.inditex.grp/software/AMIGA/LIBJAVLA/{javaLauncherMavenPluginVersion}/maven.html#ex_jvm[ejemplo de configuración de la _JVM_ ]
+
+== ¿Cómo puedo hacer que mi proyecto incluya librerías con partes nativas, como _SWT_?
+
+También ha de hacerlo mediante el fichero de configuración.
+
+Ver https://axdesitxws2.central.inditex.grp/software/AMIGA/LIBJAVLA/{javaLauncherMavenPluginVersion}/maven.html#ex_native_libs[ejemplo de configuración de librerías nativas]
+
+== Mi pantalla no es _HDPI_. ¿Cómo hago que el escalado dependa de mi aplicación en vez de del sistema operativo?
+
+Agregue al comando `amglauncher` el parámetro
+`-Damglauncher.dpiaware="true"`
+
+== Con qué versión de _Java_ se ejecutará mi aplicación?
+
+Se ejecutará con la máquina virtual que _Amiga Java Launcher_ lleva preinstalada, que está basada en la versión `1.8.0_202`. De momento no se han encontrado incompatibilidades, pero téngalo en cuenta.
+

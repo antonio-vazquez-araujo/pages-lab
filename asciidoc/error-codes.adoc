@@ -1,0 +1,85 @@
+= Listado de códigos de error
+:docinfo: shared,private
+:favicon: ./images/favicon.png
+
+include::attributes.adoc[]
+
+Las siguientes tablas muestran los posibles códigos de error que se pueden producir al utilizar `Amiga Java Launcher`.
+
+== Códigos de error de seguridad
+
+[cols="10%,90%"]
+|===
+| *Código*   | *Descripción*
+
+|SEC001   | No se ha podido inicializar el contexto SSL con las condiciones de seguridad de `Amiga Java Launcher`.
+|SEC002   | No se ha podido leer el contenido del fichero trusted.pins. El fichero está corrupto.
+|SEC004.1 | Imposible descargar el archivo descriptor desde una conexión remota no segura (El protocolo de comunicación tiene que ser HTTPS).
+|SEC004.2 | Imposible descargar el recurso desde una conexión remota no segura (El protocolo de comunicación tiene que ser HTTPS).
+|SEC005   | Imposible leer los certificados de confianza del almacén de certificados de la máquina virtual.
+|SEC006   | Imposible cargar los certificados de confianza almacenados en el almacén de certificados de la máquina virtual del lanzador `Amiga Java Launcher` (runtime).
+|SEC007.1 | La firma de la librería no está verificada.
+|SEC007.2 | El contenido de la librería no se ha podido verificar.
+|SEC007.3 | Imposible leer la librería.
+|SEC007.4 | El contenido de la librería ha sido modificado.
+|SEC008   | El archivo .jar no se encuentra firmado.
+|SEC009   | La clave pública extraída del archivo descriptor de la aplicación (ijlp) no es de confianza.
+|SEC010   | Imposible verificar la firma del archivo descriptor. O bien no se encuentra definida la firma en el encabezado del fichero, o bien en contenido está corrupto o la verificación de la firma no es válida.
+|SEC010.1 | Imposible verificar el contenido del archivo descriptor generado a partir del jnlp.
+|SEC011   | No se ha podido crear el verificador de firma para la clave pública obtenida.
+|SEC012.1 | No se ha podido verificar la validez del certificado de firma del recurso.
+|SEC012.2 | No se puede validar la ruta del certificado.
+|SEC012.3 | Se ha modificado el contenido del recurso firmado.
+|SEC013   | Usuario no autorizado para comprobar permisos de modo desarrollo.
+|===
+
+== Códigos de error de configuración
+
+[cols="10%,90%"]
+|===
+| *Código*   | *Descripción*
+
+|CONF001.1   | No se ha podido recuperar la ruta de la variable de sistema JAVA_HOME.
+|CONF001.2   | No se encuentra la ruta de instalación de la aplicación Amiga Java Launcher.
+|CONF002     | No se ha encontrado el almacén de certificados 'cacerts' en la ruta esperada de la máquina virtual (runtime/lib/security).
+|CONF003     | Imposible leer el archivo trusted.pins que contiene los pines de los certificados de confianza del Launcher. El archivo no se encuentra en la localización esperada (runtime/lib/security/trusted.pins).
+|CONF003.1   | Imposible leer el archivo trusted-dev.pins que contiene los pines de los certificados de confianza del Launcher para usar en devmode. El archivo no se encuentra en la localización esperada (runtime/lib/security/trusted-dev.pins).
+|CONF004.1   | Imposible leer la sección 'signing' del archivo descriptor (ijlp).
+|CONF004.2   | Imposible obtener el certificado a partir de la clave pública contenida en la sección 'signing' (puede ser que  el contenido está mal formado).
+|CONF004.3   | Imposible recuperar la clave pública del archivo descriptor (ijlp).
+|CONF005.1   | No se ha proporcionado ruta de descarga del archivo descriptor de la aplicación (parámetro 'app').
+|CONF005.2   | No se ha podido descargar el archivo descriptor de la aplicación para la ruta proporcionada.
+|CONF008.1   | No se encuentra el parámetro 'checksum' para el recurso de la aplicación definido en el archivo descriptor.
+|CONF008.2   | No se encuentra el parámetro 'signature' para el recurso de la aplicación definido en el archivo descriptor.
+|CONF009.1   | No se encuentra el catálogo de máquinas virtuales (jvm-catalog).
+|CONF009.2   | No se encuentra el directorio de la runtime de la versión especificada para la aplicación de negocio.
+|CONF009.3   | No se encuentra la versión de la runtime especificada en el catálogo de máquinas virtuales.
+|CONF009.4   | No se puede establecer la JAVA_HOME para la runtime especificada (no se encuentra el directorio 'bin').
+|CONF009.5   | Sistema operativo no soportado. El catálogo actual de runtimes no dispone de jvm para el sistema operativo del pc en el que se está ejecutando amglauncher.
+|CONF009.6   | Arquitectura no soportada. El catálogo actual de runtimes no dispone de jvm para arquitectura del pc en el que se está ejecutando amglauncher.
+|CONF010.1   | Uno de los argumentos definidos para la máquina virtual de java no cumple el formato o no es un argumento válido.
+|===
+
+== Códigos de error de ejecución
+
+[cols="10%,90%"]
+|===
+| *Código*   | *Descripción*
+|RUN001    | No se encuentra el archivo descriptor de la aplicación.
+|RUN002    | No se ha podido leer el archivo descriptor de la aplicación especificado.
+|RUN003.1  | Ha fallado la validación del checksum para el recurso de la aplicación.
+|RUN003.2  | Ha fallado la validación de la firma para el recurso de la aplicación.
+|RUN004.1  | Imposible descargar el recurso de la aplicación para la url solicitada.
+|RUN004.2  | Codebase url mal formada.
+|RUN004.3  | Url del host de la aplicación mal formada.
+|RUN005    | No es posible ejecutar la aplicación con el runtime especificado en el sistema operativo del usuario.
+|RUN006    | No se pueden actualizar los recursos de la aplicación porque la aplicación está ejecutándose.
+|RUN007    | No se pueden actualizar los recursos de la aplicación porque no se puede acceder a una librería de la caché para comprobarla y el lanzador no puede eliminarla.
+|RUN008.1  | No se puede recuperar el contexto de arranque de la aplicación de negocio.
+|RUN008.2  | No se pueden obtener los parámetros necesarios para el arranque del proceso java de la aplicación de negocio.
+|RUN009    | No se puede iniciar la aplicación de negocio.
+|RUN0010   | Parametros de ejecución del lanzador incorrectos.
+|RUN0011   | No se puede desinstalar la aplicación.
+|RUN0012   | No se puede ejecutar en modo desarrollador, los permisos no pueden comprobarse.
+|RUN0013   | No se puede ejecutar en modo desarrollador. El usuario no está autorizado.
+|===
