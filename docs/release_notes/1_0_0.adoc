@@ -1,9 +1,0 @@
-[[v1_0_0]]
-= Release notes versión 1.0.0
-
-Primera versión del lanzador de aplicaciones Amiga Java Launcher. Las principales características son:
-
-* Descargar los recursos de la aplicación de negocio.
-* Comprobación de actualización de recursos de la aplicación.
-* Verificaciones de seguridad.
-* Arranque de la aplicación de negocio.

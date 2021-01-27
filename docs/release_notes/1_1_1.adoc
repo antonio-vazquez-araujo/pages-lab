@@ -1,8 +1,0 @@
-[[v1_1_1]]
-= Release notes versión 1.1.1
-
-== Corrección de errores
-
-* Se soluciona problema de bloqueo del proceso del Lanzador al enviar métricas de arranque de las aplicaciones de
-negocio a Graylog.
-

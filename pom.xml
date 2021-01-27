@@ -1,0 +1,155 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.inditex.aqsw.amgaijlp</groupId>
+        <artifactId>amigajavalauncher</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>APPCLR-AmigaJavaLauncher-docs</artifactId>
+    <name>${project.groupId}:${project.artifactId}</name>
+
+    <properties>
+        <!-- Versión del plugin para enlazar links desde la doc -->
+        <javaLauncherMavenPluginVersion>1.1.0</javaLauncherMavenPluginVersion>
+
+        <!-- FIXME Cambiar cuando se integre con Maven CI Friendly -->
+        <revision>${project.version}</revision>
+        <changelist>-SNAPSHOT</changelist>
+        <full>true</full>
+
+        <!--Donde se copiará el site generado -->
+        <amiga.site.directory>/datos/axdesitxws2_software/AMIGA${changelist}/AMGAIJLP/${revision}</amiga.site.directory>
+        <amiga.site.urlBase>https://axdesitxws2.central.inditex.grp/software/AMIGA</amiga.site.urlBase>
+        <refdocs.build.directory>${project.build.directory}/refdocs/</refdocs.build.directory>
+        <html.build.directory>${project.build.directory}/generated-docs/reference/html</html.build.directory>
+
+        <maven.build.timestamp.format>dd-MM-yyyy</maven.build.timestamp.format>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <profiles>
+        <profile>
+            <id>full</id>
+            <activation>
+                <property>
+                    <name>full</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-asciidoc-resources</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <resources>
+                                        <resource>
+                                            <directory>src/main/asciidoc</directory>
+                                            <filtering>false</filtering>
+                                        </resource>
+                                    </resources>
+                                    <outputDirectory>${refdocs.build.directory}</outputDirectory>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>copy-site</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <resources>
+                                        <resource>
+                                            <directory>${html.build.directory}</directory>
+                                            <filtering>false</filtering>
+                                        </resource>
+                                    </resources>
+                                    <outputDirectory>${amiga.site.directory}</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctor-maven-plugin</artifactId>
+                        <configuration>
+                            <sourceDirectory>${refdocs.build.directory}</sourceDirectory>
+                            <outputDirectory>${html.build.directory}</outputDirectory>
+                            <requires>
+                                <require>asciidoctor-diagram</require>
+                            </requires>
+                            <attributes>
+                                <!-- Para header/footer -->
+                                <revnumber>${revision}</revnumber>
+                                <revdate>${maven.build.timestamp}</revdate>
+                                <organization>${project.organization.name}</organization>
+                            </attributes>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.asciidoctor</groupId>
+                                <artifactId>asciidoctorj-diagram</artifactId>
+                                <version>${asciidoctorj.diagram.version}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>com.github.allati.asciidoctor.monotree</groupId>
+                                <artifactId>asciidoctor-extension-monotree</artifactId>
+                                <version>${asciidoctor-extension-monotree.version}</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <id>generate-html-documentation</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>process-asciidoc</goal>
+                                </goals>
+                                <configuration>
+                                    <backend>html5</backend>
+                                    <sourceHighlighter>highlight.js</sourceHighlighter>
+                                    <doctype>book</doctype>
+                                    <!-- SI lo ponemos a false no genera la estructura de directorios
+                                      y todo va al root -->
+                                    <preserveDirectories>false</preserveDirectories>
+                                    <relativeBaseDir>true</relativeBaseDir>
+                                    <attributes>
+                                        <!-- Visual -->
+                                        <highlightjsdir>js/highlight</highlightjsdir>
+                                        <highlightjs-theme>atom-one-light</highlightjs-theme>
+                                        <linkcss>true</linkcss>
+                                        <imagesdir>./images</imagesdir>
+                                        <icons>font</icons>
+                                        <stylesdir>css</stylesdir>
+                                        <stylesheet>amiga.css</stylesheet>
+                                        <javaLauncherMavenPluginVersion>${javaLauncherMavenPluginVersion}</javaLauncherMavenPluginVersion>
+                                    </attributes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>
