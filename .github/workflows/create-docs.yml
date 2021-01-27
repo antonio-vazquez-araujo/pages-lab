@@ -38,13 +38,12 @@ jobs:
         doctype: book
         preserveDirectories: false
         relativeBaseDir: true
-        attributes: 
-          highlightjsdir: js
-          highlightjs-theme: atom-one-light
-          linkcss: true
-          imagesdir: .
-          icons: font
-          stylesdir: css
-          stylesheet: amiga.css
-          javaLauncherMavenPluginVersion: 1111
+        highlightjsdir: js
+        highlightjs-theme: atom-one-light
+        linkcss: true
+        imagesdir: .
+        icons: font
+        stylesdir: css
+        stylesheet: amiga.css
+        javaLauncherMavenPluginVersion: 1111
 
