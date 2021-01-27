@@ -1,0 +1,31 @@
+[[v1_1_2]]
+= Release notes versión 1.1.2
+
+== Mejoras
+
+=== Sistema de log (Graylog)
+
+* Se envía la mayor información posible, siempre que esté disponible, de la aplicación de negocio (_appId_, _environment_,
+_slot_, ruta del fichero descriptor, tipo de aplicación, etc.), en todos los mensajes de error a Graylog para facilitar
+las tareas de soporte.
+
+* Se aumenta el tiempo de _timeout_ para el envío de logs a Graylog y evitar la pérdida de mensajes.
+
+* Asignación de identificadores a los procesos en segundo plano para incluir esa identificación en los mensajes de error
+a Graylog para facilitar las tareas de soporte.
+
+=== Devmode
+
+* Se envía un campo en los mensajes de log para identificar que se está arrancando en `devMode` y distinguir los mensajes
+de error de aplicaciones de negocio en producción.
+
+== Corrección de errores
+
+* Se soluciona problema de sincronización de recursos nativos cuando se duplicaba la declaración en el archivo
+descriptor en la sección de recursos nativos y de recursos de la aplicación.
+
+* Se mejora la comprobación de los parámetros admitidos por la máquina virtual de ejecución de la aplicación de negocio,
+que impedían el arranque de la aplicación cuando se introducía un valor incorrecto. Si se introducen valores incorrectos
+para los parámetros de memoria _initial heap size_ y _max heap size_ se establecen los valores por defecto, en cualquier
+otro caso, se muestra un mensaje de error que interrumpe el arranque de la aplicación de negocio.
+

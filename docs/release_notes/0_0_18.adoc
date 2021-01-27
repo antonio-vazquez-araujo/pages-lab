@@ -1,0 +1,14 @@
+[[v0_0_18]]
+= Release notes versión 0.0.18
+
+== Mejoras
+* *CLI*: Se añaden diálogos de aviso con el resultado de la ejecución cuando se ejecuta el comando `uninstall`.
+* *JVM args*: Se permite pasar parámetros a la máquina virtual mediante la anotación `-J<opción>`.
+* *Viewer*: Se inclulyen diversas mejoras de rendimiento a la hora de inspeccionar las aplicaciones instaladas en caché.
+* *Graylog*: Envío de nuevas métricas.
+* *GUI*: Mejoras de aspecto gráfico.
+
+== Incidencias
+* *Viewer*: Se soluciona problema al desinstalar las aplicaciones desde el `viewer` que no se eliminaban correctamente
+los accesos directos del escritorio ni las entradas de menú de windows.
+* *CLI*: Cuando una aplicación de negocio se está ejecutando ahora no se permite eliminar y se muestra un mensaje de aviso.

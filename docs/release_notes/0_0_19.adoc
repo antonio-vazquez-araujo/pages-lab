@@ -1,0 +1,18 @@
+[[v0_0_19]]
+= Release notes versión 0.0.19
+
+== Mejoras
+* *Módulos*: Se añade soporte para la gestión/ejecución de aplicaciones de negocio que utilizan librerías modulares (Java 9+).
+* *Log*: Se reduce la escritura de log para el nivel por defecto. Toda la información que se mostraba antes se puede ver utilizando el
+parámetro _-debug_.
+* *Documentación*: Nuevo módulo independiente de documentación para el lanzador Amiga Java Launcher (se separa de la documentación
+del plugin de Maven).
+* *Conexión*: Se aumentan los tiempos por defecto de conexión para 'timeout' (30 segundos) y 'read' (40 segundos).
+* *CLI*: Se muestra una barra de progreso durante la desinstalación de las aplicaciones de negocio.
+
+== Incidencias
+* *Viewer*: Se soluciona problema de pintado del icono según el tipo de aplicación ( jnlp | ijlp ).
+* *JVM*: Se soluciona un problema de configuración de la versión de la máquina virtual cuando se declara como "11+".
+* *CLI*: Se corrige contenido del mensaje de aviso cuando se desinstalan las aplicaciones.
+* *IJLP*: Se eliminan los espacios (principio y final) de los valores de las system properties declaradas en el archivo descriptor.
+* *Offline*: Se corrige un problema al lanzar aplicaciones Java WebStart (jnlp) con el modo offline.

@@ -1,0 +1,146 @@
+= Amiga Java Launcher DevMode
+
+== Introducción
+
+_Amiga Java Launcher_ ofrece un modo de trabajo llamado `devmode` que permite lanzar aplicaciones en modo local,
+saltándose la protección `ssl` que obliga a ubicarlas siempre en localizaciones seguras. Mediante este modo,
+que se activa con el parámetro `devmode` en la ejecución del launcher, se permite a los desarrolladores autorizados
+lanzar proyectos desde servidores sin seguridad (protocolo `http://`) e incluso desde directorios locales
+(protocolo `file://`).
+
+El plugin `amiga-javalauncher-maven-plugin`, cuando funciona en este modo, firmará la aplicación con un certificado con
+validez exclusiva para entornos de desarrollo, que en ningún caso será válido en entornos de _PRE_ ó _PRO_.
+
+Aún así, _Amiga Java Launcher_ siempre comprobará la integridad y la autenticidad (en este caso la "falsa" autenticidad)
+del proyecto y de sus recursos en el momento del lanzamiento.
+
+NOTE: Para ejecutar las aplicaciones en `devmode` se ha de usar la consola, no se aplica a los lanzamientos realizados desde
+el visor de aplicaciones.
+
+== Asignación de permisos
+
+Para utilizar `devmode`, _Amiga Java Launcher_ requiere que al desarrollador se le haya asignado el permiso necesario en el sistema de gestión de acceso.
+
+Hay uno distinto para cada entorno:
+
+- DEV: https://axdeswas17.central.inditex.grp:9443/AQSWAdministracionSSO/aplicaciones/index.html#init/ 
+- PRE: https://axpreweb1.central.inditex.grp/AQSWAdministracionSSO/aplicaciones/index.html#init/ 
+- PRO: https://axinwebnospnego.central.inditex.grp/AQSWAdministracionSSO/aplicaciones/index.html#init/ 
+
+La persona encargada de la seguridad, ha de acceder a él y asignar, para la aplicación de código _JIRA_ `AMGAIJLP`, a cada desarrollador el rol `developer`.
+A este rol se le podrán asignar los permisos:
+
+- `allow_no_ssl_verify`: permite conexiones no seguras. Es decir, se permiten protocolos como _http_ ó _file_ y no se restringe
+únicamente a _https_.
+- `allow_dev_signed_apps`: permite arrancar aplicaciones de negocio firmadas con el certificado de desarrollo.
+
+Cuando _Amiga Java Launcher_ trate de lanzar una aplicación en modo `devmode`, se validará a través del gestor de
+permisos y mediante las credenciales del desarrollador si se dispone de los permisos necesarios para lanzarla
+desde la ubicación no segura.
+
+== Autenticación
+
+Será necesario estar autenticados en la red de Inditex para consultar los permisos asignados al usuario
+mientras estamos en `devmode`. El tipo de autenticación utilizada es _SPNEGO_.
+
+=== Definición de credenciales
+
+Desde la red de Inditex:: No será necesario incluir las credenciales ya que se recuperan mediante
+_SPNEGO_.
+
+Desde fuera de la red de Inditex:: La consulta de permisos se debe realizar mediante autenticación básica y
+se necesitará incluir las credenciales del desarrollador mediante las propiedades: `-Damglauncher.auth.user` y
+`-Damglauncher.auth.pass`.
+
+Para que _Amiga JavaLauncher_ funcione en `devmode`, simplemente hay que agregar un parámetro indicándolo:
+```
+amglauncher -devmode <jnlp|ijlp> 
+```
+Si se ejecuta desde fuera de la red Inditex, usando por ejemplo, una VPN, agregar además las credenciales, por ejemplo:
+```
+amglauncher 
+-Damglauncher.auth.user=nombre_del_usuario 
+-Damglauncher.auth.pass=password_del_usuario 
+-devmode <jnlp|ijlp> 
+```
+
+[[add-dev-profile]]
+== Desplegando la aplicación
+
+Lo ideal para no tener que estar modificando continuamente la configuración del _javalauncher-maven-plugin_ es usar
+un `profile` de Maven para configurar el plugin en `devmode`:
+
+- La propiedad `devMode` con su valor a `true` para activar este modo.
+
+- Un `configurationFile` específico para este modo.
+
+```
+<profile>
+    <id>generate-ijlp-devmode</id>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.inditex.aqsw.libjavla</groupId>
+                <artifactId>javalauncher-maven-plugin</artifactId>
+                <configuration>
+                <devMode>true</devMode>
+                <configurationFile>
+                    src/main/ijlp/configuration-devmode.xml
+                </configurationFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>build</id>
+                        <goals>
+                            <goal>build-dist</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+    </build>
+</profile>
+```
+
+y en ese fichero de configuración `configuration-devmode.xml` en la propiedad `codebase` se especifica la localización deseada:
+
+```
+<java-launcher>
+    <main-class>${start-class}</main-class>
+    <codebase>http://localhost:8080/fx-javalauncher-demo</codebase>
+    <app-id>FXJavaLauncherDemo</app-id>
+    <environment>des</environment>
+    <slot>default</slot>
+
+    <information>
+        <title>Launcher Demo</title>
+        <vendor>Inditex</vendor>
+        <icon href="http://localhost:8080/fx-javalauncher-demo/resources/icon.png" kind="default"/>
+        <offline-allowed/>
+        <shortcut online="true" install="true">
+            <desktop/>
+            <menu submenu="JavaLauncher Demo"/>
+        </shortcut>
+    </information>
+    ...
+
+```
+
+== La misma seguridad
+
+El modo de trabajo `devmode` solamente implica que se puede colocar el fichero descriptor en un destino sin seguridad,
+como un simple directorio del equipo de desarrollo. No _obstante, se_ realizarán todas las comprobaciones que
+_Amiga JavaLauncher_ realiza en modo normal, como comprobar que los recursos no se han modificado ya que cada firma se
+corresponde exactamente con cada contenido, que todos los recursos se han descargado correctamente, e incluso se
+actualizará la copia en caché si hay una nueva versión disponible.
+
+== No se aplica al Viewer
+
+_El visor de_ apps de _Amiga JavaLauncher_ permite mostrar las apps ya instaladas e incluso lanzarlas desde ahí.
+En ese caso, el parámetro `-devmode` no tendrá ningún efecto: la aplicación se intentará lanzar en modo normal
+y, si está en un servidor local o sin seguridad, el launcher rechazará su ejecución. Para probar las apps en `devmode`
+*se ha de usar la consola*.
+
+

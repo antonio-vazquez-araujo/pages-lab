@@ -1,0 +1,279 @@
+= Amiga Java Launcher
+include::attributes.adoc[]
+
+== Introducción
+
+`Amiga Java Launcher` es un lanzador de aplicaciones desarrolladas con la tecnología Java.
+Su uso está orientado principalmente a ejecutar aplicaciones de escritorio y su objetivo es sustituir a la implementación anterior _Java Web Start_ ofrecida por _Oracle_.
+El lanzador se puede ejecutar bien desde línea de comandos o bien haciendo doble click sobre el archivo descriptor de la aplicación (_.ijlp_).
+`Amiga Java Launcher` permite actualizaciones automáticas de las aplicaciones de negocio y
+también permite arrancar las aplicaciones definidas con el archivo descriptor (_.jnlp_) utilizado por _Java Web Start_.
+
+== ¿Cómo funciona?
+
+`Amiga Java Launcher` es una aplicación que permite arrancar  aplicaciones de negocio.
+El lanzador conoce el repositorio remoto de cada aplicación, donde se alojan todos sus recursos.
+
+Cada aplicación se define mediante un archivo descriptor _.ijlp_ (_launch.ijlp_) que contiene toda la información de sus recursos.
+`Amiga Java Launcher` busca de forma automática en el repositorio remoto y comprueba si hay una nueva versión de este descriptor cada vez que se ejecuta.
+
+Una vez descargado el fichero ijlp, `Amiga Java Launcher` sincroniza cada recurso de la aplicación mostrando en pantalla una barra de progreso.
+Una vez que todos están sincronizados se almacenan en una caché por aplicación para no volver a repetir la operación a no ser que sean actualizados.
+
+Por último, se recupera la clase _main_ especificada en el descriptor y se ejecuta la aplicación de negocio en un nuevo proceso independiente al del lanzador.
+Cuando la aplicación de negocio está arrancada el proceso del lanzador se termina.
+
+Antes de cada ejecución de la aplicación de negocio, el lanzador sincronizará todos los recursos y tendremos la seguridad
+de que siempre se estará ejecutando una versión actualizada.
+
+== Usando Amiga Java Launcher
+
+A continuación se explican algunos aspectos importantes del uso de `Amiga Java Launcher`.
+
+=== Uso
+
+Amiga Java Launcher ejecuta una aplicación que se encuentra en una url concreta:
+
+[source,bash]
+----
+ amglauncher https://remote_location/launch.ijlp
+----
+
+[NOTE]
+====
+El archivo descriptor de la aplicación se puede especificar en formato fichero, en lugar de formato web, por si su
+aplicación está alojada en una ubicación de red común. Las rutas siempre tienen que ser absolutas, no se permiten rutas
+relativas. Por ejemplo:
+
+[source]
+----
+	amglauncher W:\dev\applications\ijlp\launch.ijlp
+----
+====
+
+Durante el uso del lanzador de aplicaciones se pueden producir errores de ejecución link:error-codes.html[(ver listado de errores)].
+
+=== Entorno de instalación
+
+En la instalación y/o ejecución de `Amiga Java Launcher`, intervienen los siguientes directorios:
+
+- Directorio de instalación.
+- Directorio de configuración.
+- Directorio de caché de aplicaciones de negocio.
+
+[[config-dir]]
+==== Directorio de instalación.
+
+Es el directorio en el que se instala el lanzador de aplicaciones `Amiga Java Launcher`.
+Este directorio típicamente será:
+
+[source,bash]
+----
+ C:\Program Files\AmigaLauncher
+----
+
+El contenido de este directorio de instalación es el siguiente:
+
+[ditaa]
+....
+     AmigaLauncher
+         |
+         +--app
+         |
+         +--jvm_catalog/
+         |
+         +--runtime/
+         |
+         \--amglauncher.exe
+....
+
+[cols="20%,80%"]
+|===
+|Directorio
+|Descripción
+
+| app
+| Contiene el código y recursos de la aplicación `Amiga Java Launcher`
+
+| jvm-catalog
+| Contiene el catálogo de máquinas virtuales de Java con las que se ejecutarán las aplicaciones de negocio. Se puede encontrar más información link:jvmcatalog.html[aquí].
+
+| runtime
+| Contiene la máquina virtual con la que se ejecuta el lanzador de aplicaciones `Amiga Java Launcher`
+
+| amglauncher.exe
+| Ejecutable que inicia el lanzador de aplicaciones.
+|===
+
+==== Directorio de configuración.
+
+Una vez instalado el lanzador de aplicaciones y al ejecutar el programa, se crea una carpeta con información para la ejecución del lanzador en el directorio del usuario que está ejecutando la aplicación.
+Este directorio (_.AmigaJavaLauncher_) tiene la siguiente jerarquía:
+
+[ditaa]
+....
+OS user dir path
+      |
+      \--.AmigaJavaLauncher
+           |
+           +--log
+           |   |
+           |   +-- applications
+           |
+           \--system
+               |
+               \--bootstrap-cfg.properties
+
+....
+
+[cols="20%,80%"]
+|===
+|Directorio
+|Descripción
+
+| log
+| Contiene los ficheros de log del lanzador de aplicaciones.
+
+| log\applications
+| Contiene los ficheros de log de las aplicaciones de negocio cuando se activa la propiedad de redirigir el log.
+
+| system
+| Contiene los ficheros con parámetros de funcionamiento del lanzador (bootstrap-cfg.properties).
+
+|===
+
+El fichero _bootstrap-cfg.properties_ permite configurar algunos parámetros del lanzador. El contenido de este fichero se muestra a continuación:
+
+[source, properties]
+----
+# Environment para establecer la url. Valores válidos: DEV | PRE | PRO. El valor por defecto es PRO
+amiga.javalauncher.repository.environment.active = PRO
+
+#### Application Insights Token
+amiga.javalauncher.appinsights.token = c5125785-7d10-4ff2-9db3-331f17de35e7
+amiga.javalauncher.appinsights.token.pre = c5125785-7d10-4ff2-9db3-331f17de35e7
+amiga.javalauncher.appinsights.token.dev = bb506288-5e2a-482a-9a26-f263eee361c5
+
+# Delegar la ejecución de la aplicación de negocio en la versión de java instalada en el equipo
+# si no se encuentra la versión dentro del catálogo ofrecido por Amiga Java Launcher. Por defecto false.
+amiga.javalauncher.fallback.java = false
+
+#### Url del microservice heimdal
+amiga.javalauncher.heimdal.url = https://sscc.central.inditex.grp/hmdlquery
+amiga.javalauncher.heimdal.url.pre = https://sscc-pre.central.inditex.grp/hmdlquery
+amiga.javalauncher.heimdal.url.dev = https://des-openshift.axdesocp1.central.inditex.grp/hmdlquery-develop
+----
+
+
+Los parámetros que incluye son:
+
+[cols=2*]
+|===
+|Parámetro
+|Descripción
+
+| `amiga.javalauncher.repository.environment.active`
+| Entorno activo para establecer las url's de los repositorios. El valor por defecto es PRO.
+
+Si se activa el entorno DEV o PRE, se toma la url terminada en dicho entorno.
+
+**Valores posibles:** DEV, PRE, PRO
+**Valor por defecto:** PRO
+
+|`amiga.javalauncher.appinsights.token`
+| Application Insights token de *producción*.
+
+**Valor por defecto:** c5125785-7d10-4ff2-9db3-331f17de35e7
+
+|`amiga.javalauncher.appinsights.token.pre`
+| Application Insights token para de preproducción.
+
+**Valor por defecto:** xxxxxxx
+
+|`amiga.javalauncher.appinsights.token.dev`
+| Application Insights token para de desarrollo.
+
+**Valor por defecto:** xxxxxxx
+
+|`amiga.javalauncher.fallback.java`
+| Delegar la ejecución de la aplicación de negocio en la versión de java instalada en el equipo si no se encuentra la
+versión dentro del catálogo ofrecido por `Amiga Java Launcher`.
+
+**Valor por defecto:** false
+
+|`amiga.javalauncher.heimdal.url`
+|URL del microservicio de autorización
+
+**Valor por defecto:** https://sscc.central.inditex.grp/hmdlquery
+|`amiga.javalauncher.heimdal.url.pre`
+|URL del microservicio de autorización en entorno de preproducción
+
+**Valor por defecto:** https://sscc-pre.central.inditex.grp/hmdlquery
+|`amiga.javalauncher.heimdal.url.dev`
+|URL del microservicio de autorización en entorno de desarrollo
+
+**Valor por defecto:** https://des-openshift.axdesocp1.central.inditex.grp/hmdlquery-develop
+|===
+
+==== Directorio de caché de aplicaciones de negocio
+
+El lanzador de aplicaciones gestiona una caché de aplicaciones de negocio que requiere una jerarquía de directorios para su correcto funcionamiento:
+
+[ditaa]
+....
+    OS path 
+     |
+     \--Inditex
+         |
+         \--ijlp
+             |
+             \--apps
+                |
+                \--MyApplication				[appId]
+                   |
+                   +--dev					[environment]
+                   |   |
+                   |   \--default				[slot]
+                   |
+                   +--pre-lt
+                   |
+                   +--pre-pru
+                   |
+                   +-- pru
+                   |
+                   \-- pro
+
+....
+
+Para evitar problemas de permisos de escritura y/o acceso a recursos, esta jerarquía se localiza en un directorio específico que depende del sistema operativo.
+De tal modo que `OS path` es:
+
+[cols=2*]
+|===
+|Sistema operativo
+|Ruta
+
+| Windows
+|`~/AppData/Local/`
+
+| Mac
+|`~/Library/Application Support/`
+
+| Linux
+| `~/.`
+|===
+
+Los directorios internos:
+
+[horizontal]
+**apps** :: directorio en donde se instalan las aplicaciones con sus recursos.
+
+**environment** :: entorno o versión de la aplicación.
+Suelen ser
+ `dev`, `pre-lt`, `pre-pru`, `pru`, `pro`, etc.
+
+**slot** :: directorio donde está la propia aplicación.
+Suele ser `default`, pero puede haber otros nombres.
+
+
+include::cli.adoc[leveloffset=+1]

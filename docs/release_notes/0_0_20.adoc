@@ -1,0 +1,15 @@
+[[v0_0_20]]
+= Release notes versión 0.0.20
+
+== Mejoras
+* *Boot*: Se mejora el algoritmo de gestión de los recursos de la cache de aplicaciones para reducir y optimizar el tiempo
+de arranque de las aplicaciones de negocio.
+* *Instalador*: Se unifican todas las librerías en una única y se realizan cambios en la estructura del proyecto
+para mejorar el tiempo de arranque del lanzador.
+* *Lanzador*: Compatibilidad con dispositivos HDPI. Por defecto el lanzador ejecutará las aplicaciones de negocio en
+dispositivos de alta resolución (HDPI) delegando el escalado de la aplicación en el sistema operativo. Se puede
+delegar la responsabilidad del escalado en la aplicación de negocio, mediante la propiedad: _-Damglauncher.dpiaware="true"_
+
+== Incidencias
+* *Resources*: Se soluciona el problema que no se mostraba mensaje de error cuando el lanzador no podía descargar
+un recurso de la aplicación.

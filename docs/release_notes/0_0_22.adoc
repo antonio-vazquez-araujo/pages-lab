@@ -1,0 +1,5 @@
+[[v0_0_22]]
+= Release notes versión 0.0.22
+
+== Mejoras
+* *Viewer*: Se incluye la versión del lanzador en el visor de aplicaciones.
