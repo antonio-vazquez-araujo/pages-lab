@@ -1,4 +1,4 @@
-= Amiga Java Launcher - Guía de referencia
+= Documentación del proyecto
 :docinfo: shared
 :favicon: ./images/favicon.png
 :last-update-label!:
