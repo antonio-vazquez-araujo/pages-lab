@@ -1,7 +1,9 @@
 name: build and deploy docs
 
-on:  [push]
-branch: master
+on:
+  push:
+    branches:
+      - master
 jobs:
   adoc_build:
     runs-on: ubuntu-18.04
