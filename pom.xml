@@ -146,20 +146,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
             </plugin>
-            <plugin>
-                <groupId>com.inditex.aqsw.amiga.javaformat</groupId>
-                <artifactId>amiga-javaformat-maven-plugin</artifactId>
-                <version>${inditex.amiga-javaformat.version}</version>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <inherited>true</inherited>
-                        <goals>
-                            <goal>validate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
 
     </build>
