@@ -70,7 +70,7 @@
         <maven-site-plugin.version>3.7.1</maven-site-plugin.version>
         <asciidoctor-maven-plugin.version>1.5.7.1</asciidoctor-maven-plugin.version>
         <asciidoctorj.diagram.version>1.5.10</asciidoctorj.diagram.version>
-        <asciidoctor-extension-monotree.version>0.0.1</asciidoctor-extension-monotree.version>
+        <!-- <asciidoctor-extension-monotree.version>0.0.1</asciidoctor-extension-monotree.version> -->
         <doxia-module-markdown.version>1.8</doxia-module-markdown.version>
         <maven-project-info-reports-plugin.version>2.9</maven-project-info-reports-plugin.version>
 

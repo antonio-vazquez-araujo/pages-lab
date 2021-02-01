@@ -110,11 +110,11 @@
                                 <artifactId>asciidoctorj-diagram</artifactId>
                                 <version>${asciidoctorj.diagram.version}</version>
                             </dependency>
-                            <dependency>
+                            <!-- <dependency>
                                 <groupId>com.github.allati.asciidoctor.monotree</groupId>
                                 <artifactId>asciidoctor-extension-monotree</artifactId>
                                 <version>${asciidoctor-extension-monotree.version}</version>
-                            </dependency>
+                            </dependency> -->
                         </dependencies>
                         <executions>
                             <execution>
