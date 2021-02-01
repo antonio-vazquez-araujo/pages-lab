@@ -1,155 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.inditex.aqsw.amgaijlp</groupId>
-        <artifactId>amigajavalauncher</artifactId>
-        <version>2.0.0-SNAPSHOT</version>
-    </parent>
-    <artifactId>APPCLR-AmigaJavaLauncher-docs</artifactId>
-    <name>${project.groupId}:${project.artifactId}</name>
 
+    <groupId>com.inditex.aqsw.amgaijlp</groupId>
+    <artifactId>amigajavalauncher</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>AMIGA Java Launcher</name>
+    <url>http://www.inditex.com</url>
+
+    <distributionManagement>
+        <repository>
+            <id>maven-inditex-repository</id>
+            <name>maven-inditex-repository</name>
+            <!--suppress UnresolvedMavenProperty -->
+            <url>${releasesRepositoryUrl}</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven-inditex-repository</id>
+            <name>maven-inditex-repository</name>
+            <!--suppress UnresolvedMavenProperty -->
+            <url>${snapshotRepositoryUrl}</url>
+        </snapshotRepository>
+        <site>
+            <id>amiga-javalauncher-doc</id>
+            <url>file://${amiga.site.directory}/${amiga.project.name}/${project.version}</url>
+        </site>
+    </distributionManagement>
+
+    <developers>
+        <developer>
+            <id>danielgcou</id>
+            <name>Daniel Graña Cousido</name>
+            <email>danielgcou@ext.inditex.com</email>
+        </developer>
+
+    </developers>
+
+    <!-- Properties -->
     <properties>
-        <!-- Versión del plugin para enlazar links desde la doc -->
-        <javaLauncherMavenPluginVersion>1.1.0</javaLauncherMavenPluginVersion>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>11</java.version>
 
-        <!-- FIXME Cambiar cuando se integre con Maven CI Friendly -->
-        <revision>${project.version}</revision>
-        <changelist>-SNAPSHOT</changelist>
-        <full>true</full>
 
-        <!--Donde se copiará el site generado -->
-        <amiga.site.directory>/datos/axdesitxws2_software/AMIGA${changelist}/AMGAIJLP/${revision}</amiga.site.directory>
+        <!-- =========================================================== -->
+        <!-- Plugin versions -->
+        <!-- =========================================================== -->
+        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+        <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
+        <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+        <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
+        <inditex.amiga-javaformat.version>1.3.0</inditex.amiga-javaformat.version>
+
+
+        <!-- =========================================================== -->
+        <!-- External libs versions -->
+        <!-- =========================================================== -->
+
+
+        <!-- =========================================================== -->
+        <!-- SITE -->
+        <!-- =========================================================== -->
+        <amiga.site.directory>/datos/axdesitxws2_software/AMIGA</amiga.site.directory>
         <amiga.site.urlBase>https://axdesitxws2.central.inditex.grp/software/AMIGA</amiga.site.urlBase>
-        <refdocs.build.directory>${project.build.directory}/refdocs/</refdocs.build.directory>
-        <html.build.directory>${project.build.directory}/generated-docs/reference/html</html.build.directory>
+        <amigaSiteURL>${amiga.site.urlBase}</amigaSiteURL>
+        <amiga.project.name>AMGAIJLP</amiga.project.name>
+        <maven-pdf-plugin.version>1.4</maven-pdf-plugin.version>
+        <maven-site-plugin.version>3.7.1</maven-site-plugin.version>
+        <asciidoctor-maven-plugin.version>1.5.7.1</asciidoctor-maven-plugin.version>
+        <asciidoctorj.diagram.version>1.5.10</asciidoctorj.diagram.version>
+        <asciidoctor-extension-monotree.version>0.0.1</asciidoctor-extension-monotree.version>
+        <doxia-module-markdown.version>1.8</doxia-module-markdown.version>
+        <maven-project-info-reports-plugin.version>2.9</maven-project-info-reports-plugin.version>
 
-        <maven.build.timestamp.format>dd-MM-yyyy</maven.build.timestamp.format>
     </properties>
 
     <build>
+
+        <pluginManagement>
+
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin.version}</version>
+                </plugin>
+
+                <!-- Subida de fuentes a artifactory -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>${maven-project-info-reports-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${maven-deploy-plugin.version}</version>
+                    <configuration>
+                        <skip>${amiga.config.skipDeploy}</skip>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.asciidoctor</groupId>
+                    <artifactId>asciidoctor-maven-plugin</artifactId>
+                    <version>${asciidoctor-maven-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>**</exclude>
-                    </excludes>
-                </configuration>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.inditex.aqsw.amiga.javaformat</groupId>
+                <artifactId>amiga-javaformat-maven-plugin</artifactId>
+                <version>${inditex.amiga-javaformat.version}</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <inherited>true</inherited>
+                        <goals>
+                            <goal>validate</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
+
     </build>
-    <profiles>
-        <profile>
-            <id>full</id>
-            <activation>
-                <property>
-                    <name>full</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-resources-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>copy-asciidoc-resources</id>
-                                <phase>generate-resources</phase>
-                                <goals>
-                                    <goal>copy-resources</goal>
-                                </goals>
-                                <configuration>
-                                    <resources>
-                                        <resource>
-                                            <directory>src/main/asciidoc</directory>
-                                            <filtering>false</filtering>
-                                        </resource>
-                                    </resources>
-                                    <outputDirectory>${refdocs.build.directory}</outputDirectory>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>copy-site</id>
-                                <phase>install</phase>
-                                <goals>
-                                    <goal>copy-resources</goal>
-                                </goals>
-                                <configuration>
-                                    <resources>
-                                        <resource>
-                                            <directory>${html.build.directory}</directory>
-                                            <filtering>false</filtering>
-                                        </resource>
-                                    </resources>
-                                    <outputDirectory>${amiga.site.directory}</outputDirectory>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.asciidoctor</groupId>
-                        <artifactId>asciidoctor-maven-plugin</artifactId>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
                         <configuration>
-                            <sourceDirectory>${refdocs.build.directory}</sourceDirectory>
-                            <outputDirectory>${html.build.directory}</outputDirectory>
-                            <requires>
-                                <require>asciidoctor-diagram</require>
-                            </requires>
-                            <attributes>
-                                <!-- Para header/footer -->
-                                <revnumber>${revision}</revnumber>
-                                <revdate>${maven.build.timestamp}</revdate>
-                                <organization>${project.organization.name}</organization>
-                            </attributes>
+                            <skip>true</skip>
                         </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.asciidoctor</groupId>
-                                <artifactId>asciidoctorj-diagram</artifactId>
-                                <version>${asciidoctorj.diagram.version}</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>com.github.allati.asciidoctor.monotree</groupId>
-                                <artifactId>asciidoctor-extension-monotree</artifactId>
-                                <version>${asciidoctor-extension-monotree.version}</version>
-                            </dependency>
-                        </dependencies>
-                        <executions>
-                            <execution>
-                                <id>generate-html-documentation</id>
-                                <phase>prepare-package</phase>
-                                <goals>
-                                    <goal>process-asciidoc</goal>
-                                </goals>
-                                <configuration>
-                                    <backend>html5</backend>
-                                    <sourceHighlighter>highlight.js</sourceHighlighter>
-                                    <doctype>book</doctype>
-                                    <!-- SI lo ponemos a false no genera la estructura de directorios
-                                      y todo va al root -->
-                                    <preserveDirectories>false</preserveDirectories>
-                                    <relativeBaseDir>true</relativeBaseDir>
-                                    <attributes>
-                                        <!-- Visual -->
-                                        <highlightjsdir>js/highlight</highlightjsdir>
-                                        <highlightjs-theme>atom-one-light</highlightjs-theme>
-                                        <linkcss>true</linkcss>
-                                        <imagesdir>./images</imagesdir>
-                                        <icons>font</icons>
-                                        <stylesdir>css</stylesdir>
-                                        <stylesheet>amiga.css</stylesheet>
-                                        <javaLauncherMavenPluginVersion>${javaLauncherMavenPluginVersion}</javaLauncherMavenPluginVersion>
-                                    </attributes>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
 
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
+    <modules>
+        <module>APPCLR-AmigaJavaLauncher-docs</module>
+    </modules>
 </project>

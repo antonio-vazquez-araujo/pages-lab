@@ -1,0 +1,14 @@
+= Amiga Java Launcher - Guía de referencia
+:docinfo: shared
+:favicon: ./images/favicon.png
+:last-update-label!:
+
+Guía de referencia de la librería `Amiga Java Launcher`.
+Puede consultar también en la versión <<index-single.adoc#intro, HTML Single>>
+
+[horizontal]
+<<introduction.adoc#guia, Introducción>>:: Introducción de la librería.
+<<launcher.adoc#,Amiga Java Launcher>>:: Lanzador de aplicaciones.
+<<faq.adoc#, F.A.Q.>> :: Preguntas más frecuentes.
+<<release_notes.adoc#, Histórico de Versiones>> :: Histórico de versiones de Amiga Java Launcher.
+
