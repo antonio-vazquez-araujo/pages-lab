@@ -70,7 +70,7 @@
                                     <outputDirectory>${refdocs.build.directory}</outputDirectory>
                                 </configuration>
                             </execution>
-                            <execution>
+                            <!-- <execution>
                                 <id>copy-site</id>
                                 <phase>install</phase>
                                 <goals>
@@ -85,8 +85,8 @@
                                     </resources>
                                     <outputDirectory>${amiga.site.directory}</outputDirectory>
                                 </configuration>
-                            </execution>
-                        </executions>
+                            </execution> -->
+                        </executions> 
                     </plugin>
                     <plugin>
                         <groupId>org.asciidoctor</groupId>
